@@ -1,0 +1,47 @@
+# Render Blueprint for Tambo OS — https://render.com/docs/blueprint-spec
+# New → Blueprint in the Render dashboard. Secret values (sync: false)
+# must be filled in the dashboard; fixed values are set here.
+services:
+  - type: web
+    name: tambo-os
+    runtime: node
+    plan: free
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+
+      # ---- Clerk routing (fixed) ----
+      - key: NEXT_PUBLIC_CLERK_SIGN_IN_URL
+        value: sign-in
+      - key: NEXT_PUBLIC_CLERK_SIGN_UP_URL
+        value: sign-up
+      - key: NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL
+        value: /dashboard
+      - key: NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL
+        value: /onboarding
+
+      # ---- Required secrets (set in dashboard) ----
+      - key: NEXT_PUBLIC_TAMBO_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      # Set to your https://<service>.onrender.com URL, then redeploy
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+
+      # ---- Optional integrations (set in dashboard if used) ----
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: SLACK_CLIENT_ID
+        sync: false
+      - key: SLACK_CLIENT_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_INWORLD_API_KEY
+        sync: false
